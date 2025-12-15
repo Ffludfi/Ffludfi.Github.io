@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LiveMap</title>
+
+<style>
+    :root {
+        --accent: #b7effa;
+        --page-padding: 10%;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #fff;
+        color: #111;
+    }
+
+    /* ---------------- HEADER ---------------- */
+    header {
+        background: var(--accent);
+        padding: 60px var(--page-padding);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .hero-text {
+        max-width: 450px;
+        font-size: 18px;
+    }
+
+    .hero-buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 12px;
+    }
+
+    .hero-buttons button {
+        padding: 10px 18px;
+        border: 2px solid #000;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+    }
+
+    .hero-img {
+        width: 260px;
+    }
+
+    /* ---------------- SLIDER ---------------- */
+
+    .bloggers {
+        padding: 40px var(--page-padding);
+        text-align: center;
+    }
+
+    .slider {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        margin-top: 20px;
+    }
+
+    .slider-track {
+        display: flex;
+        gap: 40px;
+        transition: transform 0.4s ease;
+    }
+
+    .blogger {
+        text-align: center;
+    }
+
+    .blogger img {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto 8px;
+    }
+
+    .slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: white;
+        border: 2px solid black;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 8px;
+        z-index: 10;
+    }
+
+    .slider-btn.left { left: 10px; }
+    .slider-btn.right { right: 10px; }
+
+    /* ---------------- ABOUT ---------------- */
+#about {
+    width: 100%;
+    display: flex;
+    justify-content: center;      /* Центрируем главный контейнер */
+    padding: 60px 0;
+}
+
+.about-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+    max-width: 1100px;            /* Центрированная область */
+    padding: 0 20px;
+}
+
+/* Видео */
+.about-video video {
+    width: 480px;
+    height: auto;
+    border-radius: 14px;
+    display: block;
+}
+
+/* Текст */
+.about-text {
+    max-width: 500px;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.about-text h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+    /* ---------------- PRODUCT ---------------- */
+
+   /* --- ВЫРАВНИВАНИЕ БЛОКА --- */
+.product-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: #b7effa;
+    padding: 60px 0;
+}
+
+.product-block {
+    display: flex;
+    gap: 40px;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* --- КНОПКИ-КАРТИНКИ --- */
+.product-btn-img {
+    width: 90px;
+    height: 90px;
+    padding: 6px;
+    border-radius: 14px;
+    cursor: pointer;
+    object-fit: contain;
+
+    /* Фиксируем размер, чтобы outline не влиял */
+    box-sizing: border-box;
+}
+
+.product-selected {
+    outline: 3px solid #b7effa; /* рамка без прыжка */
+    background: #b7effa;
+}
+.product-buttons {
+    display: flex;
+    flex-direction: column;  /* Кнопки строго в столбик */
+    gap: 20px;               /* Промежуток между ними */
+}
+
+/* --- ПРАВАЯ ИНФО-ПАНЕЛЬ --- */
+.product-content {
+    background: rgba(255,255,255,0.8);
+    padding: 25px;
+    border-radius: 16px;
+    width: 100%;
+}
+
+.product-info-image {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.product-content h3 {
+    margin: 0 0 12px;
+    font-size: 26px;
+}
+
+.product-content p {
+    font-size: 18px;
+    line-height: 1.45;
+}
+
+    /* ---------------- CONTACTS ---------------- */
+
+    .contacts {
+        padding: 50px var(--page-padding);
+    }
+
+    .contacts h2 {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .contact-cards {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        width: 220px;
+        padding: 14px;
+        background: #f4f4f4;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .card img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    /* ---------------- FOOTER ---------------- */
+
+    footer {
+        text-align: center;
+        padding: 40px;
+        margin-top: 20px;
+    }
+    html {
+    scroll-behavior: smooth;
+}
+
+/* NAV */
+.top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-inner {
+    padding: 16px var(--page-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-links a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* BUTTON EFFECTS */
+button {
+    transition: 0.2s;
+}
+
+
+
+
+/* PRODUCT ICONS */
+.product-btn-img {
+    transition: 0.2s;
+}
+
+
+/* ---------- LOGO ---------- */
+.nav-logo {
+    height: 36px;
+    cursor: pointer;
+}
+
+/* ---------- NAV BUTTON ---------- */
+.nav-btn {
+    padding: 10px 22px;
+    border-radius: 20px;
+
+    background: #F8F8F8;
+    color: black;
+    border: 2px solid #007ACC;
+    box-sizing: border-box; /* inside */
+
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+/* HOVER */
+.nav-btn:hover {
+    background: #CCEBFF;
+    border: 2px solid #007ACC;
+}
+
+/* ACTIVE */
+.nav-btn:active {
+    background: #0099FF;
+    border-color: #0099FF;
+    color: #ffffff;
+}
+html {
+    scroll-behavior: smooth;
+}
+
+/* NAV */
+.top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-inner {
+    padding: 16px var(--page-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-links a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* BUTTON EFFECTS */
+button {
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #CCEBFF;
+    border: 2px solid #007ACC;
+}
+
+button:active {
+    background: #0099FF;
+    border-color: #0099FF;
+    color: #ffffff;
+}
+
+/* PRODUCT ICONS */
+.product-btn-img {
+    transition: 0.2s;
+}
+
+.product-btn-img:hover {
+    transform: scale(1.08);
+}
+#promo button {
+    padding: 10px 22px;
+    border-radius: 20px;
+    background: #F8F8F8;
+    color: black;
+    border: 2px solid #007ACC;
+    transition: 0.2s;
+}
+
+#promo button:hover {
+    border: 3px solid #007ACC ;
+
+    background: #CCEBFF; 
+}
+
+#promo button:active {
+    background: #0099FF;
+    border-color: #0099FF;
+    color: #fff;
+}
+</style>
+</head>
+<body>
+<!-- ---------- NAVBAR ---------- -->
+<nav class="top-nav">
+    <div class="nav-inner">
+        <img src="img/Logo.png" alt="LiveMap" class="nav-logo">
+        <div class="nav-links">
+            <a href="#hero">Главная</a>
+            <a href="#bloggers">Блогеры</a>
+            <a href="#about">О нас</a>
+            <a href="#product">Продукт</a>
+            <a href="#promo">Промо</a>
+            <a href="#contacts">Контакты</a>
+        </div>
+    </div>
+</nav>
+
+
+<!-- ---------------- HEADER ---------------- -->
+<header id="hero">
+    <div class="hero-text">
+        <b>Ищешь как и где провести выходные?<br>Ответ уже есть!</b><br><br>
+        Мы собрали все мероприятия твоего города в одном приложении!
+        Обучайся, тусуйся, общайся!
+
+        <div style = "padding-top: 20px;">
+            <button class="nav-btn">Зарегистрироваться</button>
+            <button class = "nav-btn">Попробовать демо</button>
+        </div>
+    </div>
+
+    <img src="img/Ресурс 27mousefire.svg" class="hero-img">
+</header>
+
+
+
+<!-- ---------------- SLIDER ---------------- -->
+<section class="bloggers" id="bloggers">
+    <p><strong>Все эти блогеры уже пользуются нашим приложением!</strong></p>
+
+    <div class="slider">
+        <button class="slider-btn left" onclick="slideLeft()">‹</button>
+        <button class="slider-btn right" onclick="slideRight()">›</button>
+
+        <div class="slider-track" id="sliderTrack">
+            <div class="blogger"><img src="img/image 80.png"><div>Лав Соса</div></div>
+            <div class="blogger"><img src="img/image 81.png"><div>Exile</div></div>
+            <div class="blogger"><img src="img/image 82.png"><div>MrBeast</div></div>
+            <div class="blogger"><img src="img/image 83.png"><div>Julia Gavrilina</div></div>
+            <div class="blogger"><img src="img/image 84.png"><div>Олег Коффи</div></div>
+            <div class="blogger"><img src="img/image 85.png"><div>Nix</div></div>
+            <div class="blogger"><img src="img/image 86.png"><div>Buster</div></div>
+            <div class="blogger"><img src="img/image 87.png"><div>Литвин</div></div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ---------------- ABOUT ---------------- -->
+<section id="about">
+    <div class="about-wrapper">
+        
+        <!-- Видео слева -->
+        <div class="about-video">
+            <video autoplay loop muted playsinline>
+                <source src="video/video.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Текст справа -->
+        <div class="about-text">
+            <h2>О нас</h2>
+            <p>
+                Наше приложение — это живая карта, созданная специально для поиска самых интересных мероприятий поблизости.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+
+
+<!-- ---------------- PRODUCT ---------------- -->
+<section class="product-wrapper" id="product">
+    <div class="product-block">
+
+        <!-- КНОПКИ-КАРТИНКИ -->
+        <div class="product-buttons">
+            <img src="img/Ресурс 30selfi.svg" id="btn0" class="product-btn-img" onclick="selectProduct(0)">
+            <img src="img/Ресурс 29selfi.svg" id="btn1" class="product-btn-img" onclick="selectProduct(1)">
+            <img src="img/Ресурс 31chillmouse.svg" id="btn2" class="product-btn-img" onclick="selectProduct(2)">
+        </div>
+
+        <!-- ПРАВАЯ ИНФО-ОБЛАСТЬ -->
+        <div class="product-content" id="productContent">
+            <img id="productImage" src="img/Logo.png" class="product-info-image">
+            <h3 id="productTitle">Наши функции</h3>
+            <p id="productText">Нажмите кнопку слева, чтобы увидеть функции.</p>
+        </div>
+
+    </div>
+</section>
+<!-- ---------- PROMO ---------- -->
+<section id="promo" style="padding:70px var(--page-padding); text-align:center; background:#fafafa;">
+    <h2>Подберите мероприятие за 10 секунд</h2>
+    <p>Выберите настроение — мы подскажем, куда пойти</p><br>
+
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+        <button  onclick="promoPick('🎉 Тусовки и вечеринки')">🎉Радостное</button>
+        <button onclick="promoPick('🎓 Лекции и обучение')">🎓 Изучающее</button>
+        <button onclick="promoPick('🎶 Концерты и шоу')">🎶 Танцевальное</button>
+        <button onclick="promoPick('🎨 Арт и творчество')">🎨 Креативное</button>
+    </div>
+
+    <p id="promoResult" style="margin-top:30px;font-size:20px;font-weight:bold;"></p>
+</section>
+
+
+
+<!-- ---------------- CONTACTS ---------------- -->
+<section class="contacts" id="contacts">
+    <h2>Наши контакты</h2>
+
+    <div class="contact-cards">
+        <div class="card">
+            <img src="img/contacts2.jpg">
+            <b>Егор</b><br>
+            Аналитик<br>
+            liveimap@gmail.com<br>
+            +7 952 342 5718
+
+        </div>
+        <div class="card">
+            <img src="img/contacts3.jpg">
+            <b>Евгений</b><br>
+            Дизайнер<br>
+            liveimap@gmail.com<br>
+            +7 952 342 5718
+        </div>
+        <div class="card">
+            <img src="img/contacts4.jpg">
+            <b>Роман</b><br>
+            Главный редактор<br>
+            liveimap@gmail.com<br>
+            +7 952 342 5718
+        </div>
+        <div class="card">
+            <img src="img/dima.jpg">
+            <b>Дмитрий</b><br>
+            Копирайтер<br>
+            liveimap@gmail.com<br>
+            +7 952 342 5718
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ---------------- FOOTER ---------------- -->
+<footer>
+    <p><strong>Вы все ещё не знаете чем заняться вечером?</strong><br>
+    Вы теряете больше чем думаете.</p>
+
+    <button class="nav-btn">
+        Зарегистрироваться
+    </button>
+</footer>
+
+
+
+<!-- ---------------- JAVASCRIPT ---------------- -->
+<script>
+/* ---- SLIDER ---- */
+let offset = 0;
+const track = document.getElementById("sliderTrack");
+const cardWidth = 150;
+
+function slideLeft() {
+    offset += cardWidth;
+    track.style.transform = `translateX(${offset}px)`;
+}
+
+function slideRight() {
+    offset -= cardWidth;
+    track.style.transform = `translateX(${offset}px)`;
+}
+
+/* ---- PRODUCT SWITCH ---- */
+const productData = [
+    {
+        img: "img/Ресурс 30selfi.svg",
+        title: "Ивенты и активности",
+        text: "Посещай события, копи баллы и обменивай их на эксклюзивные призы. Каждый день — новое приключение!"
+    },
+    {
+        img: "img/Ресурс 29selfi.svg",
+        title: "Маскот-помощник",
+        text: "Наш медвежонок сопровождает тебя, подсказывает новые события и делает взаимодействие веселым."
+    },
+    {
+        img: "img/Ресурс 31chillmouse.svg",
+        title: "Поддержка 24/7",
+        text: "Мы всегда на связи. Наша поддержка работает круглосуточно, чтобы помочь в любой ситуации."
+    }
+];
+
+function selectProduct(index) {
+    // Обновляем контент справа
+    document.getElementById("productImage").src = productData[index].img;
+    document.getElementById("productTitle").innerText = productData[index].title;
+    document.getElementById("productText").innerText = productData[index].text;
+
+    // Снимаем выделение со всех кнопок
+    document.querySelectorAll(".product-btn-img")
+        .forEach(btn => btn.classList.remove("product-selected"));
+
+    // Выделяем выбранную
+    document.getElementById("btn" + index).classList.add("product-selected");
+}
+function promoPick(text) {
+    document.getElementById("promoResult").innerText =
+        "Мы рекомендуем: " + text;
+}
+
+</script>
+
+</body>
+</html>
